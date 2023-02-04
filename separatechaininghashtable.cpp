@@ -193,6 +193,7 @@ void SeparateChainingHashTable::deletePID(unsigned int pid)
             head->next = deleted_process;
             deleted_process = head;
             std::cout << "success" << std::endl;
+            current_table_size--;
             return;
         }
     }

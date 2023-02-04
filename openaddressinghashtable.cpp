@@ -142,6 +142,7 @@ void OpenAddressingHashTable::deletePID(unsigned int pid)
     {
         (process)->deleted = true;
         std::cout << "success" << std::endl;
+        current_table_size--;
     }
     else
         std::cout << "failure" << std::endl;
