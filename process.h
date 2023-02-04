@@ -4,11 +4,11 @@
 class Process
 {
 public:
-    int pid;
+    unsigned int pid;
     int head_memory;
 
-    Process(int PID, int head_mem);
-    ~Process();
+    Process(unsigned int PID, int head_mem);
+    virtual ~Process() = 0;
 };
 
 #endif
