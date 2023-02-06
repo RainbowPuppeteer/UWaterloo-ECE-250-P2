@@ -200,3 +200,26 @@ void SeparateChainingHashTable::deletePID(unsigned int pid)
     std::cout << "failure" << std::endl;
 }
 
+void SeparateChainingHashTable::print(int m)
+{
+    LinkedProcess* head = (LinkedProcess*) process_table[m];
+    if (!head)
+        std::cout << "chain is empty"  << std::endl;
+    else 
+    {
+        while (1) {
+            std::cout << head->pid;
+            if (head->next)
+            {
+                std::cout << " ";
+                head = head->next;
+            }
+            else
+            {
+                std::cout << std::endl;
+                break;
+            }
+        }
+    }
+
+}
