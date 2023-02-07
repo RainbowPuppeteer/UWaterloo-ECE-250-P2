@@ -1,8 +1,7 @@
 #include "openaddressinghashtable.h"
 
 
-OpenAddressingHashTable::OpenAddressingHashTable(int N, int P):
-    HashTable(N, P) 
+OpenAddressingHashTable::OpenAddressingHashTable(int N, int P): HashTable(N, P) 
 {
     std::cout << "success" << std::endl;
 }
@@ -56,14 +55,14 @@ void OpenAddressingHashTable::insertPID(unsigned int pid)
     int probe = hashing_1(pid);
     int offset = hashing_2(pid);   
 
-    int first_deleted = 0;
+    int first_deleted = -1;
     int i = 0;
 
     while (process_table[probe] != nullptr)
     {   
         StaticProcess* process = (StaticProcess*) process_table[probe];
         // If it's the first deleted, record this.
-        if (process && first_deleted != 0)
+        if (process && first_deleted < 0)
             first_deleted = probe;
 
         // If it's not deleted and exist, then return.
@@ -80,7 +79,7 @@ void OpenAddressingHashTable::insertPID(unsigned int pid)
         probe = (probe + offset) % table_size;
     }
 
-    if (first_deleted)
+    if (first_deleted >= 0)
     {   // Free the deleted one
         delete process_table[first_deleted];
         probe = first_deleted;
