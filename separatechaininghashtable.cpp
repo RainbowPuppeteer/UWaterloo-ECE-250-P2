@@ -103,7 +103,7 @@ void SeparateChainingHashTable::insertPID(unsigned int pid)
             if (head->previous)
                 head->previous->next = tmp;
             else
-                process_table[probe] = head;
+                process_table[probe] = tmp;
 
             head->previous = tmp;
 
@@ -192,6 +192,9 @@ void SeparateChainingHashTable::deletePID(unsigned int pid)
             head->previous = nullptr;
             head->next = deleted_process;
             deleted_process = head;
+            // Reinitialize memory
+            for (int i=0; i<page_size; i++)
+                virtual_memory[head->head_memory + i] = 0;
             std::cout << "success" << std::endl;
             current_table_size--;
             return;

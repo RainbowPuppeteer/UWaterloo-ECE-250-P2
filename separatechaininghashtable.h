@@ -1,6 +1,6 @@
 #ifndef SEPARATECHAININGGHASHTABLE_H
 #define SEPARATECHAININGGHASHTABLE_H
-#include "HashTable.h"
+#include "hashtable.h"
 #include "linkedprocess.h"
 
 class SeparateChainingHashTable: public HashTable {

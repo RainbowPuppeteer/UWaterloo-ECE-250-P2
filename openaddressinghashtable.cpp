@@ -1,10 +1,7 @@
 #include "openaddressinghashtable.h"
 
 
-OpenAddressingHashTable::OpenAddressingHashTable(int N, int P): HashTable(N, P) 
-{
-    std::cout << "success" << std::endl;
-}
+OpenAddressingHashTable::OpenAddressingHashTable(int N, int P): HashTable(N, P) { }
 
 OpenAddressingHashTable::~OpenAddressingHashTable() { }
 
@@ -62,11 +59,11 @@ void OpenAddressingHashTable::insertPID(unsigned int pid)
     {   
         StaticProcess* process = (StaticProcess*) process_table[probe];
         // If it's the first deleted, record this.
-        if (process && first_deleted < 0)
+        if (process->deleted && first_deleted < 0)
             first_deleted = probe;
 
         // If it's not deleted and exist, then return.
-        if (!process && process_table[probe]->pid == pid)
+        if (!process->deleted && process_table[probe]->pid == pid)
         {
             std::cout << "failure" << std::endl;
             return;
@@ -139,9 +136,12 @@ void OpenAddressingHashTable::deletePID(unsigned int pid)
     StaticProcess* process = (StaticProcess*) searchProcess(pid);
     if(process)
     {
-        (process)->deleted = true;
+        process->deleted = true;
         std::cout << "success" << std::endl;
         current_table_size--;
+        // Reinitialize memory
+        for (int i=0; i<page_size; i++)
+            virtual_memory[process->head_memory + i] = 0;
     }
     else
         std::cout << "failure" << std::endl;

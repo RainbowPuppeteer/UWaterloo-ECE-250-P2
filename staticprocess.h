@@ -9,7 +9,7 @@ public:
     bool deleted;
 
     StaticProcess(unsigned int PID, int head_mem);
-    ~StaticProcess();
+    ~StaticProcess() = default;
 };
 
 #endif

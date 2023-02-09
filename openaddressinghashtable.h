@@ -1,7 +1,7 @@
 #ifndef OPENADDRESSINGHASHTABLE_H
 #define OPENADDRESSINGHASHTABLE_H
 
-#include "HashTable.h"
+#include "hashtable.h"
 #include "staticprocess.h"
 
 class OpenAddressingHashTable: public HashTable {
