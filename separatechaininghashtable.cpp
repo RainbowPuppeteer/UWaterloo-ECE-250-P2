@@ -48,7 +48,7 @@ int SeparateChainingHashTable::getHeadMem()
         return res;
     }
 
-    return current_table_size;
+    return current_table_size * page_size;
 }
 
 LinkedProcess* SeparateChainingHashTable::searchProcess(unsigned int pid)
@@ -69,6 +69,7 @@ LinkedProcess* SeparateChainingHashTable::searchProcess(unsigned int pid)
 
 void SeparateChainingHashTable::insertPID(unsigned int pid)
 {
+
     if (current_table_size == table_size)
     {
         std::cout << "failure" << std::endl;
@@ -94,8 +95,8 @@ void SeparateChainingHashTable::insertPID(unsigned int pid)
             std::cout << "failure" << std::endl;
             return;
         }
-        else if (head->pid < pid) // insert to the left of the head.
-        {
+        else if (pid > head->pid) // insert to the left of the head.
+        { 
             LinkedProcess* tmp = new LinkedProcess(pid, getHeadMem());
             tmp->previous = head->previous;
             tmp->next = head;
@@ -107,14 +108,16 @@ void SeparateChainingHashTable::insertPID(unsigned int pid)
 
             head->previous = tmp;
 
-
             std::cout << "success" << std::endl;
             current_table_size++;
             return;
         }
+        else if (!head->next)
+            break;
         else
             head = head->next;
-    } while (head->next);
+        
+    } while (head);
     // new node is at the end
     LinkedProcess* tmp = new LinkedProcess(pid, getHeadMem());
     tmp->previous = head;
@@ -129,14 +132,14 @@ void SeparateChainingHashTable::searchPID(unsigned int pid)
 {
     LinkedProcess* process = searchProcess(pid);
     if(process)
-        std::cout << "found " << pid << " in " << process->head_memory / page_size << std::endl;
+        std::cout << "found " << pid << " in " << hashing(pid) << std::endl;
     else
         std::cout << "not found" << std::endl;
 }
 
 void SeparateChainingHashTable::writePID(unsigned int pid, int addr, int x)
 {
-    if (addr >= page_size)
+    if (addr >= page_size || addr < 0)
     {
         std::cout << "failure" << std::endl;
         return;
@@ -154,7 +157,7 @@ void SeparateChainingHashTable::writePID(unsigned int pid, int addr, int x)
 
 void SeparateChainingHashTable::readPID(unsigned int pid, int addr)
 {
-    if (addr >= page_size)
+    if (addr >= page_size || addr < 0)
     {
         std::cout << "failure" << std::endl;
         return;
@@ -210,19 +213,11 @@ void SeparateChainingHashTable::print(int m)
         std::cout << "chain is empty"  << std::endl;
     else 
     {
-        while (1) {
-            std::cout << head->pid;
-            if (head->next)
-            {
-                std::cout << " ";
-                head = head->next;
-            }
-            else
-            {
-                std::cout << std::endl;
-                break;
-            }
+        while (head->next) {
+            std::cout << head->pid << " ";
+            head = head->next;
         }
+        std::cout << head->pid << std::endl;
     }
 
 }
